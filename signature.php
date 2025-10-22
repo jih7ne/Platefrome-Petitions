@@ -85,6 +85,45 @@ elseif ($action === 'add') {
     }
 }
 
+// Supprimer une signature
+elseif ($action === 'delete') {
+    if (!isLoggedIn()) {
+        echo json_encode(['success' => false, 'message' => 'Vous devez être connecté']);
+        exit;
+    }
+    
+    $ids = intval($_POST['id'] ?? 0);
+    $userEmail = $_SESSION['user_email'];
+    
+    // Vérifier que l'utilisateur est le signataire
+    $stmt = $pdo->prepare("SELECT EmailS, IDP FROM Signature WHERE IDS = ?");
+    $stmt->execute([$ids]);
+    $signature = $stmt->fetch();
+    
+    if (!$signature) {
+        echo json_encode(['success' => false, 'message' => 'Signature introuvable']);
+        exit;
+    }
+    
+    if ($signature['EmailS'] != $userEmail) {
+        echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+        exit;
+    }
+    
+    try {
+        $stmt = $pdo->prepare("DELETE FROM Signature WHERE IDS = ?");
+        $stmt->execute([$ids]);
+        
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Signature supprimée',
+            'petition_id' => $signature['IDP']
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de la suppression']);
+    }
+}
+
 else {
     echo json_encode(['success' => false, 'message' => 'Action non reconnue']);
 }
