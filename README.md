@@ -75,13 +75,13 @@ INSERT INTO Signature (IDP, NomS, PrenomS, PaysS, EmailS) VALUES
 - Define the following varibles
 
 ```dotenv
-DB_HOST=localhost
-DB_NAME=petition_db
-DB_USER=root
+DB_HOST=
+DB_NAME=
+DB_USER=
 DB_PASS=
-PORT=3306
-SESSION_LIFETIME=3600
-APP_ENV=development
-APP_DEBUG=true
+PORT=
+SESSION_LIFETIME=
+APP_ENV=
+APP_DEBUG=
 
 ```
