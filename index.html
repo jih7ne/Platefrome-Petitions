@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme de Pétitions</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="logo">TP3: PÉTITIONS</div>
+        <div class="nav-right">
+            <div id="navAuth">
+                <button class="btn btn-primary" onclick="openAuthModal()">Se Connecter</button>
+            </div>
+            <div id="navUser" class="user-profile hidden">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userName">Utilisateur</span>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Exprimez Votre Opinion</h1>
+            <p class="hero-description">Créez et signez des pétitions qui comptent. Rejoignez des milliers de personnes qui font la différence dans leurs communautés.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="checkAuthAndCreate()">Créer une Pétition</button>
+                <button class="btn btn-outline" onclick="scrollToPetitions()">Parcourir les Pétitions</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="stats-container" id="statsContainer">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPetitions">0</div>
+                <div class="stat-label">Pétitions Actives</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSignatures">0</div>
+                <div class="stat-label">Signatures Totales</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="petitionsSection">
+        <div class="section-header">
+            <h2 class="section-title">Pétitions Actives</h2>
+            <button class="btn btn-primary" onclick="checkAuthAndCreate()">Créer une Pétition</button>
+        </div>
+        <div id="petitionsContainer" class="petitions-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Chargement des pétitions...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section hidden" id="topPetitionSection">
+        <h2 class="section-title">Pétition la Plus Signée</h2>
+        <div id="topPetitionContent"></div>
+    </section>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Bienvenue</h3>
+                <button class="close-modal" onclick="closeModal('authModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Se Connecter</button>
+                        <button class="auth-tab" data-tab="register">S'Inscrire</button>
+                    </div>
+                    <form class="auth-form active" id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mot de Passe</label>
+                            <input type="password" class="form-input" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Se Connecter</button>
+                    </form>
+                    <form class="auth-form" id="registerForm">
+                        <div class="form-group">
+                            <label class="form-label">Prénom</label>
+                            <input type="text" class="form-input" name="prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom</label>
+                            <input type="text" class="form-input" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mot de Passe</label>
+                            <input type="password" class="form-input" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">S'Inscrire</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="createPetitionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Créer une Nouvelle Pétition</h3>
+                <button class="close-modal" onclick="closeModal('createPetitionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createPetitionForm">
+                    <div class="form-group">
+                        <label class="form-label">Titre de la Pétition</label>
+                        <input type="text" class="form-input" name="titre" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date de Fin (Optionnelle)</label>
+                        <input type="date" class="form-input" name="dateFin">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nom de l'Organisateur</label>
+                        <input type="text" class="form-input" name="nomPorteur" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email de Contact</label>
+                        <input type="email" class="form-input" name="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Créer la Pétition</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="signModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Signer la Pétition</h3>
+                <button class="close-modal" onclick="closeModal('signModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="signModalContent"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
